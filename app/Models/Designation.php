@@ -13,6 +13,8 @@ class Designation extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['department_id', 'name', 'is_active'];
+
     protected function casts(): array
     {
         return [

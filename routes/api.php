@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DesignationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -13,11 +15,10 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
 
-
         // ── Admin only ──
         Route::middleware('role:admin')->group(function () {
-            // Route::apiResource('departments', DepartmentController::class);
-            // Route::apiResource('designations', DesignationController::class);
+            Route::apiResource('departments', DepartmentController::class);
+            Route::apiResource('designations', DesignationController::class);
         });
 
         // ── Admin + HR Manager ──

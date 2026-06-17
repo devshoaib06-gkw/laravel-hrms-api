@@ -12,6 +12,8 @@ class Department extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['name', 'description', 'is_active'];
+
     protected function casts(): array
     {
         return [
