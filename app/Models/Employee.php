@@ -50,4 +50,12 @@ class Employee extends Model
     {
         return $this->hasMany(Payroll::class);
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Employee $employee) {
+            // Generate a unique employee code
+            $employee->employee_code = 'EMP-'.strtoupper(uniqid());
+        });
+    }
 }

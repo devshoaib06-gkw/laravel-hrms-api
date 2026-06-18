@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -19,6 +20,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware('role:admin')->group(function () {
             Route::apiResource('departments', DepartmentController::class);
             Route::apiResource('designations', DesignationController::class);
+            Route::apiResource('employees', EmployeeController::class);
         });
 
         // ── Admin + HR Manager ──
