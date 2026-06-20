@@ -26,4 +26,11 @@ class Leave extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Leave $leave) {
+            $leave->total_days = $leave->from_date->diffInDays($leave->to_date) + 1;
+        });
+    }
 }

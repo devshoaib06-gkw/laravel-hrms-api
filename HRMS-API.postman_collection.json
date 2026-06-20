@@ -1,0 +1,424 @@
+{
+  "info": {
+    "name": "HRMS API",
+    "description": "Laravel HRMS API collection (v1)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://laravel-hrms-api.test/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "department_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "designation_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "employee_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "leave_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Admin User\",\n    \"email\": \"admin@example.com\",\n    \"password\": \"Password123!\",\n    \"password_confirmation\": \"Password123!\",\n    \"role\": \"admin\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"Password123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "item": [
+        {
+          "name": "List Departments",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/departments",
+              "host": ["{{base_url}}"],
+              "path": ["departments"]
+            }
+          }
+        },
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Human Resources\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/departments",
+              "host": ["{{base_url}}"],
+              "path": ["departments"]
+            }
+          }
+        },
+        {
+          "name": "Get Department",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/departments/{{department_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["departments", "{{department_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Human Resources Updated\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/departments/{{department_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["departments", "{{department_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/departments/{{department_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["departments", "{{department_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Designations",
+      "item": [
+        {
+          "name": "List Designations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/designations",
+              "host": ["{{base_url}}"],
+              "path": ["designations"]
+            }
+          }
+        },
+        {
+          "name": "Create Designation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Software Engineer\",\n    \"department_id\": {{department_id}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/designations",
+              "host": ["{{base_url}}"],
+              "path": ["designations"]
+            }
+          }
+        },
+        {
+          "name": "Get Designation",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/designations/{{designation_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["designations", "{{designation_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Designation",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Senior Software Engineer\",\n    \"department_id\": {{department_id}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/designations/{{designation_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["designations", "{{designation_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Designation",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/designations/{{designation_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["designations", "{{designation_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "List Employees",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/employees",
+              "host": ["{{base_url}}"],
+              "path": ["employees"]
+            }
+          }
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"password\": \"Password123!\",\n    \"department_id\": {{department_id}},\n    \"designation_id\": {{designation_id}},\n    \"joining_date\": \"2026-06-20\",\n    \"salary\": 50000\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/employees",
+              "host": ["{{base_url}}"],
+              "path": ["employees"]
+            }
+          }
+        },
+        {
+          "name": "Get Employee",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["employees", "{{employee_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"department_id\": {{department_id}},\n    \"designation_id\": {{designation_id}},\n    \"joining_date\": \"2026-06-20\",\n    \"salary\": 55000,\n    \"status\": \"active\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["employees", "{{employee_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["employees", "{{employee_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leaves",
+      "item": [
+        {
+          "name": "List Leaves",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/leaves",
+              "host": ["{{base_url}}"],
+              "path": ["leaves"]
+            }
+          }
+        },
+        {
+          "name": "Create Leave",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"start_date\": \"2026-07-01\",\n    \"end_date\": \"2026-07-03\",\n    \"reason\": \"Family function\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/leaves",
+              "host": ["{{base_url}}"],
+              "path": ["leaves"]
+            }
+          }
+        },
+        {
+          "name": "Get Leave",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/leaves/{{leave_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["leaves", "{{leave_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Leave Status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"approved\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/leaves/{{leave_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["leaves", "{{leave_id}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

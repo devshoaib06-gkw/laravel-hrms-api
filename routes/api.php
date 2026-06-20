@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -25,13 +26,16 @@ Route::prefix('v1')->group(function () {
 
         // ── Admin + HR Manager ──
         Route::middleware('role:admin,hr_manager')->group(function () {
-            // Route::apiResource('employees', EmployeeController::class);
+            Route::apiResource('employees', EmployeeController::class);
+            Route::put('/leaves/{leave}', [LeaveController::class, 'update']);
             // Route::apiResource('payrolls', PayrollController::class);
         });
 
         // ── Admin + HR Manager + Employee ──
         Route::middleware('role:admin,hr_manager,employee')->group(function () {
-            // Route::apiResource('leaves', LeaveController::class);
+            Route::get('leaves', [LeaveController::class, 'index']);
+            Route::post('leaves', [LeaveController::class, 'store']);
+            Route::get('leaves/{leave}', [LeaveController::class, 'show']);
             // Route::apiResource('attendances', AttendanceController::class);
         });
 
