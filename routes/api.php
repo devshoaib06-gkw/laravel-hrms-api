@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
@@ -36,6 +37,9 @@ Route::prefix('v1')->group(function () {
             Route::get('leaves', [LeaveController::class, 'index']);
             Route::post('leaves', [LeaveController::class, 'store']);
             Route::get('leaves/{leave}', [LeaveController::class, 'show']);
+            Route::get('/attendance', [AttendanceController::class, 'index']);
+            Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn']);
+            Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut']);
             // Route::apiResource('attendances', AttendanceController::class);
         });
 

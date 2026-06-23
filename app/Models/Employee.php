@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Database\Factories\EmployeeFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Fillable(['user_id', 'department_id', 'designation_id', 'employee_code', 'phone', 'joining_date', 'salary', 'status'])]
 class Employee extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<EmployeeFactory> */
+    use HasFactory, SoftDeletes;
 
     protected function casts(): array
     {

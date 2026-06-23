@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Database\Factories\DesignationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Fillable(['department_id', 'name', 'is_active'])]
 class Designation extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<DesignationFactory> */
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['department_id', 'name', 'is_active'];
 
