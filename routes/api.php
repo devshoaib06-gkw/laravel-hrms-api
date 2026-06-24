@@ -6,6 +6,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\PayrollController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -27,9 +28,11 @@ Route::prefix('v1')->group(function () {
 
         // ── Admin + HR Manager ──
         Route::middleware('role:admin,hr_manager')->group(function () {
-            Route::apiResource('employees', EmployeeController::class);
             Route::put('/leaves/{leave}', [LeaveController::class, 'update']);
-            // Route::apiResource('payrolls', PayrollController::class);
+            Route::get('/payroll', [PayrollController::class, 'index']);
+            Route::post('/payroll', [PayrollController::class, 'store']);
+            Route::put('/payroll/{payroll}', [PayrollController::class, 'update']);
+            Route::get('/payroll/{payroll}', [PayrollController::class, 'show']);
         });
 
         // ── Admin + HR Manager + Employee ──
@@ -41,6 +44,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn']);
             Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut']);
             // Route::apiResource('attendances', AttendanceController::class);
+        });
+
+        Route::middleware('role:employee')->group(function () {
+            Route::get('/my-payroll', [PayrollController::class, 'index']);
         });
 
     });

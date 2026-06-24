@@ -23,7 +23,7 @@ class Payroll extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function approvedBy(): BelongsTo
+    public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
