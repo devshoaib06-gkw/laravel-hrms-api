@@ -32,6 +32,7 @@ class LeaveController extends Controller
             'from_date' => 'required|date',
             'to_date' => 'required|date|after_or_equal:from_date',
             'reason' => 'required|string|max:255',
+            'type' => 'required|in:sick,casual,earned',
         ]);
 
         $employee = auth()->user()->employee;
@@ -66,6 +67,4 @@ class LeaveController extends Controller
 
         return response()->json($leave->load('employee.user'));
     }
-
-
 }

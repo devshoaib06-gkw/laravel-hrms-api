@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Database\Factories\LeaveFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(['employee_id', 'type', 'from_date', 'to_date', 'total_days', 'reason', 'status', 'approved_by'])]
 class Leave extends Model
 {
+    /** @use HasFactory<LeaveFactory> */
+    use HasFactory;
+
     protected function casts(): array
     {
         return [

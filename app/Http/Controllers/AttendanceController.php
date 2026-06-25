@@ -31,7 +31,7 @@ class AttendanceController extends Controller
         $today = Carbon::today()->toDateString();
 
         $existing = Attendance::where('employee_id', $employee->id)
-            ->where('date', $today)
+            ->whereDate('date', $today)
             ->first();
 
         if ($existing) {
@@ -57,7 +57,7 @@ class AttendanceController extends Controller
         $today = Carbon::today()->toDateString();
 
         $attendance = Attendance::where('employee_id', $employee->id)
-            ->where('date', $today)
+            ->whereDate('date', $today)
             ->first();
 
         if (! $attendance) {
