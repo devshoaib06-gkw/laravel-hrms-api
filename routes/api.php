@@ -23,7 +23,6 @@ Route::prefix('v1')->group(function () {
         Route::middleware('role:admin')->group(function () {
             Route::apiResource('departments', DepartmentController::class);
             Route::apiResource('designations', DesignationController::class);
-            Route::apiResource('employees', EmployeeController::class);
         });
 
         // ── Admin + HR Manager ──
@@ -33,6 +32,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/payroll', [PayrollController::class, 'store']);
             Route::put('/payroll/{payroll}', [PayrollController::class, 'update']);
             Route::get('/payroll/{payroll}', [PayrollController::class, 'show']);
+            Route::apiResource('employees', EmployeeController::class);
+
         });
 
         // ── Admin + HR Manager + Employee ──
