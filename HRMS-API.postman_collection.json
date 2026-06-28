@@ -1,53 +1,19 @@
 {
   "info": {
-    "name": "HRMS API",
-    "description": "Laravel HRMS API collection (v1)",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{token}}",
-        "type": "string"
-      }
-    ]
+    "name": "Laravel HRMS API",
+    "description": "Complete REST API collection for the Laravel 13 HRMS project. Set {{base_url}} to http://localhost and {{token}} will be auto-saved on login.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "hrms-api-collection-v1"
   },
   "variable": [
     {
       "key": "base_url",
-      "value": "http://laravel-hrms-api.test/api/v1",
+      "value": "http://localhost",
       "type": "string"
     },
     {
       "key": "token",
       "value": "",
-      "type": "string"
-    },
-    {
-      "key": "department_id",
-      "value": "1",
-      "type": "string"
-    },
-    {
-      "key": "designation_id",
-      "value": "1",
-      "type": "string"
-    },
-    {
-      "key": "employee_id",
-      "value": "1",
-      "type": "string"
-    },
-    {
-      "key": "leave_id",
-      "value": "1",
-      "type": "string"
-    },
-    {
-      "key": "payroll_id",
-      "value": "1",
       "type": "string"
     }
   ],
@@ -60,110 +26,67 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "register"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Admin User\",\n    \"email\": \"admin@example.com\",\n    \"password\": \"Password123!\",\n    \"password_confirmation\": \"Password123!\",\n    \"role\": \"admin\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/register",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "register"
-              ]
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@hrms.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\",\n  \"role\": \"admin\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    const json = pm.response.json();",
-                  "    if (json.token) pm.collectionVariables.set('token', json.token);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ]
+          }
         },
         {
           "name": "Login",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"Password123!\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/login",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
-            }
-          },
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const json = pm.response.json();",
-                  "    if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "  pm.collectionVariables.set('token', res.token);",
                   "}"
                 ],
                 "type": "text/javascript"
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hrms.com\",\n  \"password\": \"password\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
         },
         {
           "name": "Logout",
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/auth/logout",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
             }
           }
         }
@@ -173,23 +96,17 @@
       "name": "Departments",
       "item": [
         {
-          "name": "List Departments",
+          "name": "Get All Departments",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/departments",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "departments"
-              ]
+              "raw": "{{base_url}}/api/v1/departments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments"]
             }
           }
         },
@@ -198,50 +115,34 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Human Resources\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/departments",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "departments"
-              ]
+              "raw": "{\n  \"name\": \"Engineering\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
         {
-          "name": "Get Department",
+          "name": "Get Single Department",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/departments/{{department_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "departments",
-                "{{department_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
             }
           }
         },
@@ -250,29 +151,19 @@
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Human Resources Updated\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/departments/{{department_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "departments",
-                "{{department_id}}"
-              ]
+              "raw": "{\n  \"name\": \"Software Engineering\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -281,20 +172,13 @@
           "request": {
             "method": "DELETE",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/departments/{{department_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "departments",
-                "{{department_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
             }
           }
         }
@@ -304,23 +188,17 @@
       "name": "Designations",
       "item": [
         {
-          "name": "List Designations",
+          "name": "Get All Designations",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/designations",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "designations"
-              ]
+              "raw": "{{base_url}}/api/v1/designations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "designations"]
             }
           }
         },
@@ -329,50 +207,34 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/designations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "designations"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Software Engineer\",\n    \"department_id\": {{department_id}}\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/designations",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "designations"
-              ]
+              "raw": "{\n  \"name\": \"Software Engineer\",\n  \"department_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
         {
-          "name": "Get Designation",
+          "name": "Get Single Designation",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/designations/{{designation_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "designations",
-                "{{designation_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/designations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "designations", "1"]
             }
           }
         },
@@ -381,29 +243,19 @@
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/designations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "designations", "1"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Senior Software Engineer\",\n    \"department_id\": {{department_id}}\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/designations/{{designation_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "designations",
-                "{{designation_id}}"
-              ]
+              "raw": "{\n  \"name\": \"Senior Software Engineer\",\n  \"department_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -412,20 +264,13 @@
           "request": {
             "method": "DELETE",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/designations/{{designation_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "designations",
-                "{{designation_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/designations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "designations", "1"]
             }
           }
         }
@@ -435,23 +280,17 @@
       "name": "Employees",
       "item": [
         {
-          "name": "List Employees",
+          "name": "Get All Employees",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/employees",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees"
-              ]
+              "raw": "{{base_url}}/api/v1/employees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees"]
             }
           }
         },
@@ -460,50 +299,34 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"password\": \"Password123!\",\n    \"department_id\": {{department_id}},\n    \"designation_id\": {{designation_id}},\n    \"joining_date\": \"2026-06-20\",\n    \"salary\": 50000\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/employees",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees"
-              ]
+              "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@hrms.com\",\n  \"password\": \"password\",\n  \"phone\": \"+1-555-0100\",\n  \"department_id\": 1,\n  \"designation_id\": 1,\n  \"joining_date\": \"2026-07-01\",\n  \"salary\": 5000\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
         {
-          "name": "Get Employee",
+          "name": "Get Single Employee",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/employees/{{employee_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                "{{employee_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/employees/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees", "1"]
             }
           }
         },
@@ -512,29 +335,19 @@
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees", "1"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"department_id\": {{department_id}},\n    \"designation_id\": {{designation_id}},\n    \"joining_date\": \"2026-06-20\",\n    \"salary\": 55000,\n    \"status\": \"active\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/employees/{{employee_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                "{{employee_id}}"
-              ]
+              "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@hrms.com\",\n  \"phone\": \"+1-555-0101\",\n  \"department_id\": 1,\n  \"designation_id\": 1,\n  \"joining_date\": \"2026-07-01\",\n  \"salary\": 6000,\n  \"status\": \"active\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -543,20 +356,13 @@
           "request": {
             "method": "DELETE",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/employees/{{employee_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                "{{employee_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/employees/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees", "1"]
             }
           }
         }
@@ -566,106 +372,74 @@
       "name": "Leaves",
       "item": [
         {
-          "name": "List Leaves",
+          "name": "Get All Leaves",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/leaves",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "leaves"
-              ]
+              "raw": "{{base_url}}/api/v1/leaves",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "leaves"]
             }
           }
         },
         {
-          "name": "Create Leave",
+          "name": "Apply for Leave",
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaves",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "leaves"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"from_date\": \"2026-07-01\",\n    \"to_date\": \"2026-07-03\",\n    \"reason\": \"Family function\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/leaves",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "leaves"
-              ]
+              "raw": "{\n  \"leave_type\": \"annual\",\n  \"start_date\": \"2026-07-10\",\n  \"end_date\": \"2026-07-12\",\n  \"reason\": \"Family vacation\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
         {
-          "name": "Get Leave",
+          "name": "Get Single Leave",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/leaves/{{leave_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "leaves",
-                "{{leave_id}}"
-              ]
+              "raw": "{{base_url}}/api/v1/leaves/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "leaves", "1"]
             }
           }
         },
         {
-          "name": "Update Leave Status",
+          "name": "Approve or Reject Leave",
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaves/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "leaves", "1"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"status\": \"approved\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/leaves/{{leave_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "leaves",
-                "{{leave_id}}"
-              ]
+              "raw": "{\n  \"status\": \"approved\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         }
@@ -675,23 +449,17 @@
       "name": "Attendance",
       "item": [
         {
-          "name": "List Attendance",
+          "name": "Get Attendance Records",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/attendance",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "attendance"
-              ]
+              "raw": "{{base_url}}/api/v1/attendance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "attendance"]
             }
           }
         },
@@ -700,20 +468,13 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/attendance/check-in",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "attendance",
-                "check-in"
-              ]
+              "raw": "{{base_url}}/api/v1/attendance/check-in",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "attendance", "check-in"]
             }
           }
         },
@@ -722,20 +483,13 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/attendance/check-out",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "attendance",
-                "check-out"
-              ]
+              "raw": "{{base_url}}/api/v1/attendance/check-out",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "attendance", "check-out"]
             }
           }
         }
@@ -745,23 +499,17 @@
       "name": "Payroll",
       "item": [
         {
-          "name": "List Payrolls",
+          "name": "Get All Payroll",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/payroll",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "payroll"
-              ]
+              "raw": "{{base_url}}/api/v1/payroll",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payroll"]
             }
           }
         },
@@ -770,64 +518,19 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payroll",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payroll"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"employee_id\": {{employee_id}},\n    \"month\": 6,\n    \"year\": 2026,\n    \"working_days\": 26,\n    \"deductions\": 500\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/payroll",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "payroll"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    const json = pm.response.json();",
-                  "    if (json.id) pm.collectionVariables.set('payroll_id', json.id);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Get Payroll",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/payroll/{{payroll_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "payroll",
-                "{{payroll_id}}"
-              ]
+              "raw": "{\n  \"employee_id\": 1,\n  \"month\": 6,\n  \"year\": 2026,\n  \"working_days\": 22,\n  \"deductions\": 200\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
@@ -836,50 +539,49 @@
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payroll/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payroll", "1"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"status\": \"approved\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/payroll/{{payroll_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "payroll",
-                "{{payroll_id}}"
-              ]
+              "raw": "{\n  \"status\": \"approved\"\n}",
+              "options": { "raw": { "language": "json" } }
             }
           }
         },
         {
-          "name": "My Payrolls",
+          "name": "Get Single Payroll",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/my-payroll",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "my-payroll"
-              ]
+              "raw": "{{base_url}}/api/v1/payroll/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payroll", "1"]
+            }
+          }
+        },
+        {
+          "name": "My Payroll (Employee)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/my-payroll",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "my-payroll"]
             }
           }
         }

@@ -25,5 +25,12 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+docker-compose.override.yml
+npm-debug.log
+yarn-error.log
+*.pem
+laradock/
 laradock/workspace/insecure_id_rsa
 laradock/workspace/insecure_id_rsa.pub
+insecure_id_rsa
+insecure_id_rsa.pub
